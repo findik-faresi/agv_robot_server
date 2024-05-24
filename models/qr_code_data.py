@@ -1,11 +1,10 @@
 from database.database import db
 from datetime import datetime 
+from base.base import BaseModel
 
-class QRCodeData(db.Model):
+class QRCodeData(BaseModel):
     __tablename__ = "qr_code_data"
 
-    id = db.Column(db.Integer, primary_key=True)
-    
     mission_id = db.Column(db.Integer, db.ForeignKey("mission.id"), nullable=False)
     vertical_coordinate = db.Column(db.Float, nullable=False)
     horizontall_coordinate = db.Column(db.Float,nullable=False)

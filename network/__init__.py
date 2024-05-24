@@ -5,5 +5,5 @@ main_bp = Blueprint('main', __name__)
 
 socketio = SocketIO()
 
-from . import api, events
+from . import events
 

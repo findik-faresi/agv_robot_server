@@ -1,10 +1,11 @@
 from flask import Flask
 from flask_socketio import SocketIO
-from main import main_bp, socketio as main_socketio
+from network import socketio as main_socketio
 from secrets import token_hex
 from database.database import init_db,db
 from flask_migrate import Migrate
 import models 
+from api.user_endpoints import user_endpoints 
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = token_hex(16) 
@@ -12,7 +13,7 @@ app.config["SECRET_KEY"] = token_hex(16)
 init_db(app)
 migrate = Migrate(app,db)
 
-app.register_blueprint(main_bp)
+app.register_blueprint(user_endpoints,url_prefix="/api")
 
 socketio = SocketIO(app)
 

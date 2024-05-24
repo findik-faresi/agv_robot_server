@@ -1,7 +1,6 @@
-import json
+from helper import read_json
 
-with open('config.json') as config_file:
-    config_data = json.load(config_file)
+config_data = read_json("config.json")
 
 class Config:
     SQLALCHEMY_DATABASE_URI = config_data['SQLALCHEMY_DATABASE_URI']

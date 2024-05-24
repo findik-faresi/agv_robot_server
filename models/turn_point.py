@@ -1,11 +1,10 @@
 from database.database import db
 from datetime import datetime 
+from base.base import BaseModel
 
-class TurnPoint(db.Model):
+class TurnPoint(BaseModel):
     __tablename__ = "turn_point"
 
-    id = db.Column(db.Integer, primary_key=True)
-    
     mission_id = db.Column(db.Integer, db.ForeignKey("mission.id"), nullable=False)
 
     distance_traveled = db.Column(db.Float,nullable=False)
