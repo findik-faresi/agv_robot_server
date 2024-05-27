@@ -1,6 +1,7 @@
 from datetime import datetime 
 from database.database import db
 from base.base import BaseModel
+from werkzeug.security import generate_password_hash, check_password_hash
 
 class User(BaseModel):
     __tablename__ = "user"
@@ -10,4 +11,3 @@ class User(BaseModel):
     role = db.Column(db.Integer,nullable=False)
     created_date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)   
     connected_user_info = db.relationship("ConnectedUserInfo",lazy=True)
-
