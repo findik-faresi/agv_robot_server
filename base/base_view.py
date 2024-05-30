@@ -1,19 +1,13 @@
 from flask import jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
+from auth.jwt.jwt_auth import Auth
 
 class BaseView:
     model = None
 
-    @staticmethod
-    def jwt_authenticate():
-        identity = get_jwt_identity()
-        if not identity:
-            return False
-        return True
-
     @jwt_required()
     def get(self, id=None):
-        if not self.jwt_authenticate():
+        if not Auth.jwt_authenticate():
             return jsonify({"message": "Unauthorized"}), 401
 
         if id:
@@ -24,7 +18,7 @@ class BaseView:
 
     @jwt_required()
     def post(self):
-        if not self.jwt_authenticate():
+        if not Auth.jwt_authenticate():
             return jsonify({"message": "Unauthorized"}), 401
 
         data = request.get_json()
@@ -34,7 +28,7 @@ class BaseView:
 
     @jwt_required()
     def put(self, id):
-        if not self.jwt_authenticate():
+        if not Auth.jwt_authenticate():
             return jsonify({"message": "Unauthorized"}), 401
 
         data = request.get_json()
@@ -46,10 +40,9 @@ class BaseView:
 
     @jwt_required()
     def delete(self, id):
-        if not self.jwt_authenticate():
+        if not Auth.jwt_authenticate():
             return jsonify({"message": "Unauthorized"}), 401
 
         instance = self.model.query.get(id)
         instance.delete()
         return "[+] Data was successfully deleted.", 204
-

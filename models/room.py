@@ -6,7 +6,6 @@ class Room(BaseModel):
     __tablename__ = "room"
 
     room_name = db.Column(db.String(128),nullable=False)
-    is_active = db.Column(db.Boolean, nullable=False, default=True)
     
     created_date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
 

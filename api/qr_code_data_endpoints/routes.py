@@ -2,8 +2,6 @@
 from base.base_view import BaseView
 from models.qr_code_data import QRCodeData  
 from flask import Blueprint
-from models.qr_code_data import QRCodeData
-from base.base_view import BaseView
 
 qr_code_data_bp = Blueprint("qr_code_data_bp", __name__)
 

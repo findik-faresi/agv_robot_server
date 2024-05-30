@@ -1,15 +1,16 @@
 from flask import Flask
-from flask_socketio import SocketIO
-from network import socketio as main_socketio
 from secrets import token_hex
 from database.database import init_db,db
 from flask_migrate import Migrate
 import secrets
 from flask_jwt_extended import JWTManager
 
-import models 
 from api import * 
 from auth.login import login_bp
+
+from network import socketio 
+from network.join import user,robot
+from network.leave import user,robot
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = token_hex(16) 
@@ -32,7 +33,7 @@ app.register_blueprint(turn_point_bp,url_prefix="/api")
 app.register_blueprint(user_bp,url_prefix="/api")
 app.register_blueprint(login_bp,url_prefix="/auth")
 
-socketio = SocketIO(app)
+socketio.init_app(app)
 
 if __name__ == "__main__":
     socketio.run(app, host="0.0.0.0")

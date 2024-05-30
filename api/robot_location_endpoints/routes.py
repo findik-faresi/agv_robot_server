@@ -2,8 +2,6 @@
 from base.base_view import BaseView
 from models.robot_location import RobotLocation  
 from flask import Blueprint
-from models.robot_location import RobotLocation 
-from base.base_view import BaseView
 
 robot_location_bp = Blueprint("robot_location_bp", __name__)
 

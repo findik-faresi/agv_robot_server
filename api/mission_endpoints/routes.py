@@ -2,8 +2,6 @@
 from base.base_view import BaseView
 from models.mission import Mission  
 from flask import Blueprint
-from models.mission import Mission
-from base.base_view import BaseView
 
 mission_bp = Blueprint("mission_bp", __name__)
 

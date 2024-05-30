@@ -2,8 +2,6 @@
 from base.base_view import BaseView
 from models.robot import Robot  
 from flask import Blueprint
-from models.robot import Robot
-from base.base_view import BaseView
 
 robot_bp = Blueprint("robot_endpoint", __name__)
 

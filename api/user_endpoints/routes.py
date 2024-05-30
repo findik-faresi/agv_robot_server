@@ -2,8 +2,6 @@
 from base.base_view import BaseView
 from models.user import User  
 from flask import Blueprint
-from models.user import User
-from base.base_view import BaseView
 
 user_bp = Blueprint("user_bp", __name__)
 

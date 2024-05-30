@@ -2,8 +2,6 @@
 from base.base_view import BaseView
 from models.road_map import RoadMap  
 from flask import Blueprint
-from models.road_map import RoadMap 
-from base.base_view import BaseView
 
 road_map_bp = Blueprint("road_map_bp", __name__)
 

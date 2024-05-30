@@ -2,8 +2,6 @@
 from base.base_view import BaseView
 from models.turn_point import TurnPoint  
 from flask import Blueprint
-from models.turn_point import TurnPoint 
-from base.base_view import BaseView
 
 turn_point_bp = Blueprint("turn_point_bp", __name__)
 

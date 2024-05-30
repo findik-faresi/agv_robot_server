@@ -2,8 +2,6 @@
 from base.base_view import BaseView
 from models.connected_user_info import ConnectedUserInfo  
 from flask import Blueprint
-from models.connected_user_info import ConnectedUserInfo 
-from base.base_view import BaseView
 
 connected_user_info_bp = Blueprint("connected_user_info_bp", __name__)
 

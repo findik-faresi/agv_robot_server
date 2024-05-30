@@ -2,8 +2,6 @@
 from base.base_view import BaseView
 from models.room import Room  
 from flask import Blueprint
-from models.room import Room 
-from base.base_view import BaseView
 
 room_bp = Blueprint("room_bp", __name__)
 

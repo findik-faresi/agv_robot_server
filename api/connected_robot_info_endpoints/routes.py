@@ -2,8 +2,6 @@
 from base.base_view import BaseView
 from models.connected_robot_info import ConnectedRobotInfo  
 from flask import Blueprint
-from models.connected_robot_info import ConnectedRobotInfo 
-from base.base_view import BaseView
 
 connected_robot_info_bp = Blueprint("connected_robot_info_bp", __name__)
 
