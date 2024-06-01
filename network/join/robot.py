@@ -1,5 +1,5 @@
 from flask_socketio import join_room, emit
-from models import Room,Robot,ConnectedRobotInfo
+from models import Room,Robot,ConnectedRobot
 from database.database import db
 from network import socketio
 from auth.jwt.jwt_auth import Auth
@@ -31,19 +31,19 @@ def _11(payload):
         room = Room(room_name=serial_number)
         db.session.add(room)
 
-    connected_robot_info = ConnectedRobotInfo.query.filter_by(robot_id=robot.id).first()
-    if not connected_robot_info:
-        connected_robot_info = ConnectedRobotInfo(
+    connected_robot = ConnectedRobot.query.filter_by(robot_id=robot.id).first()
+    if not connected_robot:
+        connected_robot = ConnectedRobot(
             room_id=room.id,
             robot_id=robot.id,
             connected=True,
             internet_protocol=ip_address
         )
-        db.session.add(connected_robot_info)
+        db.session.add(connected_robot)
     else:
-        connected_robot_info.connected = True 
-        if connected_robot_info.internet_protocol != ip_address:
-            connected_robot_info.internet_protocol = ip_address
+        connected_robot.connected = True 
+        if connected_robot.internet_protocol != ip_address:
+            connected_robot.internet_protocol = ip_address
 
     db.session.commit()
     

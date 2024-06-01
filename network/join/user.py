@@ -1,5 +1,5 @@
 from flask_socketio import join_room, emit
-from models import Room,ConnectedUserInfo,User
+from models import Room,ConnectedUser,User
 from database.database import db
 from network import socketio
 from auth.jwt.jwt_auth import Auth
@@ -30,19 +30,19 @@ def _01(payload):
         emit("_s01", {"message":"Record not found","status":404})
         return
 
-    connected_user_info = ConnectedUserInfo.query.filter_by(user_id=user.id).first()
-    if not connected_user_info: 
-        connected_user_info = ConnectedUserInfo(
+    connected_user = ConnectedUser.query.filter_by(user_id=user.id).first()
+    if not connected_user: 
+        connected_user = ConnectedUser(
             room_id=room.id,
             user_id=user_id,
             connected=True,
             internet_protocol=ip_address
         )
-        db.session.add(connected_user_info)
+        db.session.add(connected_user)
     else:
-        connected_user_info.connected = True
-        if connected_user_info.internet_protocol != ip_address:
-            connected_user_info.internet_protocol = ip_address
+        connected_user.connected = True
+        if connected_user.internet_protocol != ip_address:
+            connected_user.internet_protocol = ip_address
 
     db.session.commit()
     

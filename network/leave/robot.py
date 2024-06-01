@@ -2,7 +2,7 @@ from flask_socketio import leave_room, emit
 from network import socketio
 from auth.jwt.jwt_auth import Auth
 from flask_jwt_extended import jwt_required
-from models import ConnectedRobotInfo, Robot
+from models import ConnectedRobot, Robot
 from database.database import db
 
 @socketio.on("_10")
@@ -24,12 +24,12 @@ def _10(payload):
         emit("_s10", {"message":"Robot not found","status":404})
         return
 
-    connected_robot_info = ConnectedRobotInfo.query.filter_by(robot_id=robot.id).first()
-    if not connected_robot_info:
+    connected_robot = ConnectedRobot.query.filter_by(robot_id=robot.id).first()
+    if not connected_robot:
         emit("_s10", {"message":"Record not found","status":404})
         return
     else:
-        connected_robot_info.connected = False
+        connected_robot.connected = False
         db.session.commit()
         leave_room(room)
 

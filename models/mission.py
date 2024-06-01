@@ -8,6 +8,10 @@ class Mission(BaseModel):
     robot_id = db.Column(db.Integer, db.ForeignKey("robot.id"), nullable=False)
     mission_end_time = db.Column(db.DateTime, nullable=False)  
     secret_key = db.Column(db.String(128), nullable=False,unique=True)
+    active = db.Column(db.Boolean, nullable=False, default=True)
+    rank = db.Column(db.Integer, nullable=False)
+    _type = db.Column(db.String(8), nullable=False)
+    
     created_date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
 
     turn_point = db.relationship("TurnPoint",lazy=True)

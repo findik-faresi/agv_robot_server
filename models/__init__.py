@@ -1,5 +1,5 @@
-from .connected_robot_info import ConnectedRobotInfo
-from .connected_user_info import ConnectedUserInfo
+from .connected_robot import ConnectedRobot
+from .connected_user import ConnectedUser
 from .mission import Mission
 from .qr_code import QRCode
 from .road_map import RoadMap

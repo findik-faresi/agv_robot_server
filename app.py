@@ -29,8 +29,8 @@ init_db(app)
 
 migrate = Migrate(app,db)
 
-app.register_blueprint(connected_robot_info_bp,url_prefix="/api")
-app.register_blueprint(connected_user_info_bp,url_prefix="/api")
+app.register_blueprint(connected_robot_bp,url_prefix="/api")
+app.register_blueprint(connected_user_bp,url_prefix="/api")
 app.register_blueprint(mission_bp,url_prefix="/api")
 app.register_blueprint(qr_code_bp,url_prefix="/api")
 app.register_blueprint(road_map_bp,url_prefix="/api")

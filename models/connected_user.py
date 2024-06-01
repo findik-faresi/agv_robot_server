@@ -2,8 +2,8 @@ from datetime import datetime
 from database.database import db
 from base.base import BaseModel
 
-class ConnectedUserInfo(BaseModel):
-    __tablename__ = "connected_user_info"
+class ConnectedUser(BaseModel):
+    __tablename__ = "connected_user"
 
     room_id = db.Column(db.Integer, db.ForeignKey("room.id"), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)

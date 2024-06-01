@@ -10,5 +10,5 @@ class Robot(BaseModel):
     
     created_date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)   
 
-    connected_robot_info = db.relationship("ConnectedRobotInfo",lazy=True)
+    connected_robot_info = db.relationship("ConnectedRobot",lazy=True)
     qr_code = db.relationship("QRCode",lazy=True)

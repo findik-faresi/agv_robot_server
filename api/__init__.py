@@ -1,5 +1,5 @@
-from .connected_robot_info_endpoints.routes import connected_robot_info_bp
-from .connected_user_info_endpoints.routes import connected_user_info_bp
+from .connected_robot_endpoints.routes import connected_robot_bp
+from .connected_user_endpoints.routes import connected_user_bp
 from .mission_endpoints.routes import mission_bp
 from .qr_code_endpoints.routes import qr_code_bp
 from .road_map_endpoints.routes import road_map_bp
