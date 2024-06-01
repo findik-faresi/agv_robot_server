@@ -9,25 +9,25 @@ from flask_jwt_extended import jwt_required
 @jwt_required()
 def _01(payload):
     if not Auth.jwt_authenticate():
-        emit("_01", {"message":"Unauthorized","status":401})
+        emit("_s01", {"message":"Unauthorized","status":401})
         return
 
-    room_name = payload.get("room_name")
+    room = payload.get("room")
     user_id = payload.get("user_id")
     ip_address = payload.get("ip_address")
 
     if not (room_name and user_id and ip_address):
-        emit("_01", {"message":"Invalid data","status":400})
+        emit("_s01", {"message":"Invalid data","status":400})
         return
 
     user = User.query.filter_by(id=user_id).first()
     if not user:
-        emit("_01", {"message":"Record not found","status":404})
+        emit("_s01", {"message":"Record not found","status":404})
         return
 
     room = Room.query.filter_by(room_name=room_name).first()
     if not room:
-        emit("_01", {"message":"Record not found","status":404})
+        emit("_s01", {"message":"Record not found","status":404})
         return
 
     connected_user_info = ConnectedUserInfo.query.filter_by(user_id=user.id).first()
@@ -38,11 +38,13 @@ def _01(payload):
             connected=True,
             internet_protocol=ip_address
         )
+        db.session.add(connected_user_info)
     else:
         connected_user_info.connected = True
+        if connected_user_info.internet_protocol != ip_address:
+            connected_user_info.internet_protocol = ip_address
 
-    db.session.add(connected_user_info)
     db.session.commit()
     
     join_room(room_name)
-    emit("_01", {"id": user.id, "status": 200}, room=room_name)
+    emit("_s01", {"message":{"id": user.id}, "status": 200}, room=room)

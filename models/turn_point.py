@@ -7,7 +7,11 @@ class TurnPoint(BaseModel):
 
     mission_id = db.Column(db.Integer, db.ForeignKey("mission.id"), nullable=False)
 
-    distance_traveled = db.Column(db.Float,nullable=False)
-    traveled_direction = db.Column(db.Integer, nullable=False)
+    horizontall_coordinate = db.Column(db.Float,nullable=False)
+    vertical_coordinate = db.Column(db.Integer, nullable=False)
 
     created_date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)   
+
+    @classmethod
+    def from_dict(cls, data):
+        return cls(**data)

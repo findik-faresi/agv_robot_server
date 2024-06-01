@@ -2,19 +2,32 @@ from flask_socketio import emit
 from network import socketio
 from auth.jwt.jwt_auth import Auth
 from flask_jwt_extended import jwt_required
+from models import RobotLocation
+from database.database import db
 
 @socketio.on("_c0")
 @jwt_required()
 def _c0(payload):
     if not Auth.jwt_authenticate():
-        emit("_c0", {"message":"Unauthorized","status":401})
+        emit("_sc0", {"message":"Unauthorized","status":401})
         return
 
-    room_name = payload["room_name"]
-    data = payload["data"]
+    room = payload.get("room")
+    data = payload.get("data")
 
-    if not (room_name and data):
-        emit("_c0", {"message":"Invalid data","status":400}) 
+    if not (room and data):
+        emit("_sc0", {"message":"Invalid data","status":400})
         return
 
-    emit("_c0", {"data": data,"status":200}, room=room_name)
+    robot_location = RobotLocation.query.filter_by(mission_id=data.get("mission_id")).first()
+    if not robot_location:
+        robot_location = RobotLocation.from_dict(data)
+    else:
+        robot_location.distance_traveled = data.get("distance_traveled")
+        if robot_location.traveled_direction != data.get("traveled_direction"):
+            robot_location.traveled_direction = data.get("traveled_direction") 
+
+    db.session.add(robot_location)
+    db.session.commit()
+
+    emit("_sc0", {"message": data,"status":200}, room=room)

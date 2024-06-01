@@ -7,14 +7,14 @@ from flask_jwt_extended import jwt_required
 @jwt_required()
 def _c3(payload):
     if not Auth.jwt_authenticate():
-        emit("_c3", {"message":"Unauthorized","status":401})
+        emit("_sc3", {"message":"Unauthorized","status":401})
         return
 
-    room_name = payload["room_name"]
-    data = payload["data"]
+    room = payload.get("room")
+    data = payload.get("data")
 
-    if not (room_name and data):
-        emit("_c3", {"message":"Invalid data","status":400}) 
+    if not (room and data):
+        emit("_sc3", {"message":"Invalid data","status":400}) 
         return
 
-    emit("_c3", {"data": data,"status":200}, room=room_name)
+    emit("_sc3", {"data": data,"status":200}, room=room)

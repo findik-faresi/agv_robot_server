@@ -10,4 +10,7 @@ class RobotLocation(BaseModel):
     traveled_direction = db.Column(db.Integer,nullable=False)
 
     created_date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)   
-
+    
+    @classmethod
+    def from_dict(cls, data):
+        return cls(**data)

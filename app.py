@@ -11,6 +11,13 @@ from auth.login import login_bp
 from network import socketio 
 from network.join import user,robot
 from network.leave import user,robot
+from network.disconnect.disconnect import handle_disconnect
+from network.location.controller import _c0
+from network.mission.controller import _c1 
+from network.qr_code.controller import _c2
+from network.status.controller import _c3
+from network.turn_point.controller import _c4
+from network.road_map.controller import _c5
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = token_hex(16) 
@@ -19,12 +26,13 @@ app.config["JWT_SECRET_KEY"] = secret_key
 jwt = JWTManager(app)
 
 init_db(app)
+
 migrate = Migrate(app,db)
 
 app.register_blueprint(connected_robot_info_bp,url_prefix="/api")
 app.register_blueprint(connected_user_info_bp,url_prefix="/api")
 app.register_blueprint(mission_bp,url_prefix="/api")
-app.register_blueprint(qr_code_data_bp,url_prefix="/api")
+app.register_blueprint(qr_code_bp,url_prefix="/api")
 app.register_blueprint(road_map_bp,url_prefix="/api")
 app.register_blueprint(robot_bp,url_prefix="/api")
 app.register_blueprint(robot_location_bp,url_prefix="/api")

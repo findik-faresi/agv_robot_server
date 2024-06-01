@@ -32,4 +32,5 @@ Controller Codes:
 - 2: Refers to actions related to QR codes
 - 3: Refers to actions related to status updates
 - 4: Refers to actions related to turn points (possibly for navigation)
+- 5: Refers to actions related to road map 
 """

@@ -9,28 +9,28 @@ from database.database import db
 @jwt_required()
 def _10(payload):
     if not Auth.jwt_authenticate():
-        emit("_10", {"message":"Unauthorized","status":401})
+        emit("_s10", {"message":"Unauthorized","status":401})
         return
 
-    secret_key = payload["secret_key"]
-    serial_number = payload["serial_number"]
+    secret_key = payload.get("secret_key")
+    serial_number = payload.get("serial_number")
 
     if not (serial_number and secret_key):
-        emit("_10", {"message":"Invalid data","status":400})
+        emit("_s10", {"message":"Invalid data","status":400})
         return
 
     robot = Robot.query.filter_by(serial_number=serial_number).first()
     if not robot:
-        emit("_10", {"message":"Robot not found","status":404})
+        emit("_s10", {"message":"Robot not found","status":404})
         return
 
     connected_robot_info = ConnectedRobotInfo.query.filter_by(robot_id=robot.id).first()
     if not connected_robot_info:
-        emit("_10", {"message":"Record not found","status":404})
+        emit("_s10", {"message":"Record not found","status":404})
         return
     else:
         connected_robot_info.connected = False
+        db.session.commit()
         leave_room(room)
 
-    if room_name: 
-        emit("_10", {"id":robot.id  , "status": 200}, room=room)
+    emit("_s10", {"message":{"id":robot.id}, "status": 200}, room=room)

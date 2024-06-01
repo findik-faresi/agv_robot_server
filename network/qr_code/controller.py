@@ -2,19 +2,26 @@ from flask_socketio import emit
 from network import socketio
 from auth.jwt.jwt_auth import Auth
 from flask_jwt_extended import jwt_required
+from models import QRCode
 
 @socketio.on("_c2")
 @jwt_required()
 def _c2(payload):
     if not Auth.jwt_authenticate():
-        emit("_c2", {"message":"Unauthorized","status":401})
+        emit("_sc2", {"message":"Unauthorized","status":401})
         return
 
-    room_name = payload["room_name"]
-    data = payload["data"]
+    room = payload.get("room")
+    data = payload.get("data")
 
-    if not (room_name and data):
-        emit("_c2", {"message":"Invalid data","status":400}) 
+    if not (room and data):
+        emit("_sc2", {"message":"Invalid data","status":400}) 
         return
 
-    emit("_c2", {"data": data,"status":200}, room=room_name)
+    qr_code = QRCode.query.filter_by(vertical_coordinate=data.get("vertical_coordinate"),horizontall_coordinate=data.get("horizontall_coordinate")).first()
+    if not qr_code:
+        qr_code = QRCode(data)
+        db.session.add(qr_code)
+        db.session.commit()
+
+    emit("_sc2", {"message": data,"status":200}, room=room)

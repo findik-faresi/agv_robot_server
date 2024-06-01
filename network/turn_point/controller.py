@@ -2,19 +2,25 @@ from flask_socketio import emit
 from network import socketio
 from auth.jwt.jwt_auth import Auth
 from flask_jwt_extended import jwt_required
+from models import TurnPoint,Mission
 
 @socketio.on("_c4")
 @jwt_required()
 def _c4(payload):
     if not Auth.jwt_authenticate():
-        emit("_c4", {"message":"Unauthorized","status":401})
+        emit("_sc4", {"message":"Unauthorized","status":401})
         return
 
-    room_name = payload["room_name"]
-    data = payload["data"]
+    room = payload.get("room")
+    data = payload.get("data")
 
-    if not (room_name and data):
-        emit("_c4", {"message":"Invalid data","status":400}) 
+    if not (room and data):
+        emit("_sc4", {"message":"Invalid data","status":400}) 
         return
 
-    emit("_c4", {"data": data,"status":200}, room=room_name)
+    mission = Mission.query.filter_by(secret_key=data.get("secret_key"))
+    if not mission:
+        emit("_sc4", {"message":"Data not found","status":415}) 
+        return
+
+    emit("_sc4", {"data": data,"status":200}, room=room)

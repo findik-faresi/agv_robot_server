@@ -10,7 +10,7 @@ from flask import request
 @jwt_required()
 def _11(payload):
     if not Auth.jwt_authenticate():
-        emit("_11", {"message":"Unauthorized","status":401})
+        emit("_s11", {"message":"Unauthorized","status":401})
         return
 
     serial_number = payload.get("serial_number")
@@ -18,20 +18,18 @@ def _11(payload):
     ip_address = request.remote_addr 
 
     if not (serial_number and secret_key and ip_address):
-        emit("_11", {"message":"Invalid data","status":400})
+        emit("_s11", {"message":"Invalid data","status":400})
         return
 
     robot = Robot.query.filter_by(serial_number=serial_number).first()
     if not robot:
         robot = Robot(serial_number=serial_number, secret_key=secret_key)
         db.session.add(robot)
-        db.session.commit()
 
     room = Room.query.filter_by(room_name=serial_number).first()
     if not room:
         room = Room(room_name=serial_number)
         db.session.add(room)
-        db.session.commit()
 
     connected_robot_info = ConnectedRobotInfo.query.filter_by(robot_id=robot.id).first()
     if not connected_robot_info:
@@ -41,13 +39,13 @@ def _11(payload):
             connected=True,
             internet_protocol=ip_address
         )
+        db.session.add(connected_robot_info)
     else:
         connected_robot_info.connected = True 
+        if connected_robot_info.internet_protocol != ip_address:
+            connected_robot_info.internet_protocol = ip_address
 
-    db.session.add(connected_robot_info)
     db.session.commit()
     
-    print(f"[+] {secret_key}") 
-    
     join_room(serial_number)
-    emit("_11", {"id": robot.id, "status": 200}, room=serial_number)
+    emit("_s11", {"message":{"id": serial_number}, "status": 200}, room=serial_number)

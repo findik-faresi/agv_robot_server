@@ -9,28 +9,28 @@ from database.database import db
 @jwt_required()
 def _00(payload):
     if not Auth.jwt_authenticate():
-        emit("_00", {"message":"Unauthorized","status":401})
+        emit("_s00", {"message":"Unauthorized","status":401})
         return
 
-    room_name = payload["room_name"]
-    user_id = payload["user_id"]
+    room = payload.get("room")
+    id = payload.get("id")
 
-    if not (user_id and room_name):
-        emit("_00", {"message":"Invalid data","status":400})
+    if not (id and room):
+        emit("_s00", {"message":"Invalid data","status":400})
         return
 
     user = User.query.filter_by(id=user_id).first()
     if not user:
-        emit("_00", {"message":"Robot not found","status":404})
+        emit("_s00", {"message":"Robot not found","status":404})
         return
 
     connected_user_info = ConnectedUserInfo.query.filter_by(user_id=user.id).first()
     if not connected_user_info:
-        emit("_00", {"message":"Record not found","status":404})
+        emit("_s00", {"message":"Record not found","status":404})
         return
     else:
         connected_user_info.connected = False
         leave_room(room)
+        db.session.commit()
 
-    if room_name: 
-        emit("_00", {"id":user.id  , "status": 200}, room=room)
+    emit("_s00", {"message":{"id": user.id}, "status": 200}, room=room)

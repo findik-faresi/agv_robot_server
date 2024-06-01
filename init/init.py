@@ -1,4 +1,4 @@
-from models import User,Robot
+from models import User ,Robot
 from werkzeug.security import generate_password_hash
 from helper import read_json
 
