@@ -8,27 +8,32 @@ from models import Mission,RoadMap
 @socketio.on("_c1")
 @jwt_required()
 def _c1(payload):
-    if not Auth.jwt_authenticate():
-        emit("_sc1", {"message":"Unauthorized","status":401})
-        return
+    try:
+        if not Auth.jwt_authenticate():
+            emit("_sc1", {"message":"Unauthorized","status":401})
+            return
 
-    room = payload.get("room")
-    data = payload.get("data")
+        room = payload.get("room")
+        data = payload.get("data")
 
-    if not (room and data):
-        emit("_sc1", {"message":"Invalid data","status":400}) 
-        return
+        if not (room and data):
+            emit("_sc1", {"message":"Invalid data","status":400}) 
+            return
 
-    mission = Mission.from_dict(data.get("M"))
+        mission = Mission.from_dict(data.get("M"))
 
-    db.session.add(mission)
-    db.session.flush()
+        db.session.add(mission)
+        db.session.flush()
 
-    for d in data.get("R"):
-        d["mission_id"] = mission.id
-        road_map = RoadMap.from_dict(d)
-        db.session.add(road_map)
+        for d in data.get("R"):
+            d["mission_id"] = mission.id
+            road_map = RoadMap.from_dict(d)
+            db.session.add(road_map)
 
-    db.session.commit()
+        db.session.commit()
 
-    emit("_sc1", {"message": data,"status":200}, room=room)
+        emit("_sc1", {"message": data,"status":200}, room=room)
+
+    except Exception as e:
+        print(f"Error handling _c1 event: {str(e)}")
+        emit("_sc1", {"message": "An error occurred while processing your request", "status": 500})

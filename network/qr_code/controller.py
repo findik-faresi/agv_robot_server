@@ -7,21 +7,26 @@ from models import QRCode
 @socketio.on("_c2")
 @jwt_required()
 def _c2(payload):
-    if not Auth.jwt_authenticate():
-        emit("_sc2", {"message":"Unauthorized","status":401})
-        return
+    try:
+        if not Auth.jwt_authenticate():
+            emit("_sc2", {"message":"Unauthorized","status":401})
+            return
 
-    room = payload.get("room")
-    data = payload.get("data")
+        room = payload.get("room")
+        data = payload.get("data")
 
-    if not (room and data):
-        emit("_sc2", {"message":"Invalid data","status":400}) 
-        return
+        if not (room and data):
+            emit("_sc2", {"message":"Invalid data","status":400}) 
+            return
 
-    qr_code = QRCode.query.filter_by(vertical_coordinate=data.get("vertical_coordinate"),horizontall_coordinate=data.get("horizontall_coordinate")).first()
-    if not qr_code:
-        qr_code = QRCode(data)
-        db.session.add(qr_code)
-        db.session.commit()
+        qr_code = QRCode.query.filter_by(vertical_coordinate=data.get("vertical_coordinate"),horizontall_coordinate=data.get("horizontall_coordinate")).first()
+        if not qr_code:
+            qr_code = QRCode(data)
+            db.session.add(qr_code)
+            db.session.commit()
 
-    emit("_sc2", {"message": data,"status":200}, room=room)
+        emit("_sc2", {"message": data,"status":200}, room=room)
+
+    except Exception as e:
+        print(f"Error handling _c2 event: {str(e)}")
+        emit("_sc2", {"message": "An error occurred while processing your request", "status": 500})
