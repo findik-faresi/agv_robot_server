@@ -6,5 +6,4 @@ from .road_map import RoadMap
 from .robot import Robot
 from .robot_location import RobotLocation
 from .room import Room
-from .turn_point import TurnPoint
 from .user import User

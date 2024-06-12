@@ -14,9 +14,8 @@ class Mission(BaseModel):
     
     created_date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
 
-    turn_point = db.relationship("TurnPoint",lazy=True)
     road_map = db.relationship("RoadMap",lazy=True)
-  
+     
     @classmethod
     def from_dict(cls, data):
         return cls(**data)

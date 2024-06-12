@@ -10,4 +10,5 @@ class User(BaseModel):
     password = db.Column(db.String(1024),nullable=False)
     role = db.Column(db.Integer,nullable=False)
     created_date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)   
+
     connected_user_info = db.relationship("ConnectedUser",lazy=True)

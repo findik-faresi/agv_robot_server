@@ -6,5 +6,4 @@ from .road_map_endpoints.routes import road_map_bp
 from .robot_endpoints.routes import robot_bp
 from .robot_location_endpoints.routes import robot_location_bp
 from .room_endpoints.routes import room_bp
-from .turn_point_endpoints.routes import turn_point_bp
 from .user_endpoints.routes import user_bp
