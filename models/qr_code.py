@@ -12,6 +12,8 @@ class QRCode(BaseModel):
     area_name = db.Column(db.String(32),nullable=True,unique=True)
     created_date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)   
 
+    road_map = db.relationship("RoadMap",lazy=True)
+
     @classmethod
     def from_dict(cls, data):
         return cls(**data)
