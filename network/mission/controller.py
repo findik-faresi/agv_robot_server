@@ -6,26 +6,21 @@ from database.database import db
 from models import Mission,RoadMap
 
 @socketio.on("_c1")
-@jwt_required()
 def _c1(payload):
     try:
-        if not Auth.jwt_authenticate():
-            emit("_sc1", {"message":"Unauthorized","status":401})
-            return
-
         room = payload.get("room")
-        data = payload.get("data")
+        data = payload.get("message")
 
         if not (room and data):
             emit("_sc1", {"message":"Invalid data","status":400}) 
             return
 
-        mission = Mission.from_dict(data.get("M"))
+        mission = Mission.from_dict(data.get("mission"))
 
         db.session.add(mission)
         db.session.flush()
 
-        for d in data.get("R"):
+        for d in data.get("road_maps"):
             d["mission_id"] = mission.id
             road_map = RoadMap.from_dict(d)
             db.session.add(road_map)

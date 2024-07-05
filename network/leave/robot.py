@@ -6,13 +6,8 @@ from models import ConnectedRobot, Robot
 from database.database import db
 
 @socketio.on("_10")
-@jwt_required()
 def _10(payload):
     try:
-        if not Auth.jwt_authenticate():
-            emit("_s10", {"message":"Unauthorized","status":401})
-            return
-
         secret_key = payload.get("secret_key")
         serial_number = payload.get("serial_number")
 

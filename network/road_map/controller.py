@@ -6,13 +6,8 @@ from database.database import db
 from models import RoadMap,Mission
 
 @socketio.on("_c5")
-@jwt_required()
 def _c5(payload):
     try:
-        if not Auth.jwt_authenticate():
-            emit("_sc5", {"message":"Unauthorized","status":401})
-            return
-
         room = payload.get("room")
         data = payload.get("data")
 

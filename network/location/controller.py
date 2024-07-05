@@ -6,15 +6,10 @@ from models import RobotLocation
 from database.database import db
 
 @socketio.on("_c0")
-@jwt_required()
 def _c0(payload):
     try:
-        if not Auth.jwt_authenticate():
-            emit("_sc0", {"message":"Unauthorized","status":401})
-            return
-
         room = payload.get("room")
-        data = payload.get("data")
+        data = payload.get("message")
 
         if not (room and data):
             emit("_sc0", {"message":"Invalid data","status":400})

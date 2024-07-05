@@ -5,13 +5,8 @@ from flask_jwt_extended import jwt_required
 from models import QRCode
 
 @socketio.on("_c2")
-@jwt_required()
 def _c2(payload):
     try:
-        if not Auth.jwt_authenticate():
-            emit("_sc2", {"message":"Unauthorized","status":401})
-            return
-
         room = payload.get("room")
         data = payload.get("data")
 
@@ -20,6 +15,7 @@ def _c2(payload):
             return
 
         qr_code = QRCode.query.filter_by(vertical_coordinate=data.get("vertical_coordinate"),horizontall_coordinate=data.get("horizontall_coordinate")).first()
+
         if not qr_code:
             qr_code = QRCode(data)
             db.session.add(qr_code)

@@ -5,15 +5,11 @@ from network import socketio
 from auth.jwt.jwt_auth import Auth
 from flask_jwt_extended import jwt_required
 from flask import request
+from werkzeug.security import check_password_hash
 
 @socketio.on("_11")
-@jwt_required()
-def _11(payload):
+def connect(payload):
     try:
-        if not Auth.jwt_authenticate():
-            emit("_s11", {"message":"Unauthorized","status":401})
-            return
-
         serial_number = payload.get("serial_number")
         secret_key = payload.get("secret_key")
         ip_address = request.remote_addr 
@@ -23,11 +19,17 @@ def _11(payload):
             return
 
         robot = Robot.query.filter_by(serial_number=serial_number).first()
+
         if not robot:
-            robot = Robot(serial_number=serial_number, secret_key=secret_key)
-            db.session.add(robot)
+            emit("_s11", {"message":"Record not found","status":415})
+            return
+
+        if check_password_hash(robot.secret_key,serial_number):
+            emit("_s11", {"message":" Unauthorized not found","status":401})
+            return 
 
         room = Room.query.filter_by(room_name=serial_number).first()
+
         if not room:
             room = Room(room_name=serial_number)
             db.session.add(room)
@@ -49,8 +51,10 @@ def _11(payload):
         db.session.commit()
         
         join_room(serial_number)
+
         emit("_s11", {"message":{"id": serial_number}, "status": 200}, room=serial_number)
 
+        print(f"[+] Robot connected to server {serial_number}.")
     except Exception as e:
-        print(f"Error handling _11 event: {str(e)}")
+        print(f"Error handling connection event: {str(e)}")
         emit("_s11", {"message": "An error occurred while processing your request", "status": 500})

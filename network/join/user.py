@@ -6,13 +6,8 @@ from auth.jwt.jwt_auth import Auth
 from flask_jwt_extended import jwt_required
 
 @socketio.on("_01")
-@jwt_required()
 def _01(payload):
     try:
-        if not Auth.jwt_authenticate():
-            emit("_s01", {"message":"Unauthorized","status":401})
-            return
-
         room = payload.get("room")
         user_id = payload.get("user_id")
         ip_address = payload.get("ip_address")

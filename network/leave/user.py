@@ -6,13 +6,8 @@ from models import ConnectedUser,User
 from database.database import db
 
 @socketio.on("_00")
-@jwt_required()
 def _00(payload):
     try:
-        if not Auth.jwt_authenticate():
-            emit("_s00", {"message":"Unauthorized","status":401})
-            return
-
         room = payload.get("room")
         id = payload.get("id")
 

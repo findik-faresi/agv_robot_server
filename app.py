@@ -9,21 +9,26 @@ from api import *
 from auth.login import login_bp
 
 from network import socketio 
+
 from network.join import user,robot
 from network.leave import user,robot
+
 from network.disconnect.disconnect import handle_disconnect
+
 from network.location.controller import _c0
 from network.mission.controller import _c1 
 from network.qr_code.controller import _c2
 from network.status.controller import _c3
 from network.road_map.controller import _c5
+from network.camera.controller import _c6
+
 from datetime import timedelta
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = token_hex(16) 
 secret_key = secrets.token_urlsafe(32)
 app.config["JWT_SECRET_KEY"] = secret_key
-app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(hours=4)
+app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(hours=4)
 jwt = JWTManager(app)
 
 init_db(app)

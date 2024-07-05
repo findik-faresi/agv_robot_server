@@ -33,4 +33,5 @@ Controller Codes:
 - 3: Refers to actions related to status updates
 - 4: Refers to actions related to turn points (possibly for navigation)
 - 5: Refers to actions related to road map 
+- 6: Refers to actions related to camera 
 """
