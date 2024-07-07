@@ -1,7 +1,5 @@
 from flask_socketio import emit
 from network import socketio
-from auth.jwt.jwt_auth import Auth
-from flask_jwt_extended import jwt_required
 
 @socketio.on("_c3")
 def _c3(payload):

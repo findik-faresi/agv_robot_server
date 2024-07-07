@@ -1,7 +1,7 @@
 from flask import Blueprint
 from flask_socketio import SocketIO
 
-socketio = SocketIO()
+socketio = SocketIO(cors_allowed_origins="*")
 
 # Function end socket naming rules (assuming direct room name as event name)
 # This section defines the naming conventions for your socket functions.

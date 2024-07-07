@@ -2,15 +2,14 @@ from flask_socketio import join_room, emit
 from models import Room,ConnectedUser,User
 from database.database import db
 from network import socketio
-from auth.jwt.jwt_auth import Auth
-from flask_jwt_extended import jwt_required
+from flask import request
 
 @socketio.on("_01")
 def _01(payload):
     try:
-        room = payload.get("room")
+        room_name = payload.get("room_name")
         user_id = payload.get("user_id")
-        ip_address = payload.get("ip_address")
+        ip_address = request.remote_addr 
 
         if not (room_name and user_id and ip_address):
             emit("_s01", {"message":"Invalid data","status":400})

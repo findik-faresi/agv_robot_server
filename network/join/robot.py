@@ -2,8 +2,6 @@ from flask_socketio import join_room, emit
 from models import Room,Robot,ConnectedRobot
 from database.database import db
 from network import socketio
-from auth.jwt.jwt_auth import Auth
-from flask_jwt_extended import jwt_required
 from flask import request
 from werkzeug.security import check_password_hash
 
