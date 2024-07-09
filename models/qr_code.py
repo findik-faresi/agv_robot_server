@@ -9,7 +9,7 @@ class QRCode(BaseModel):
 
     vertical_coordinate = db.Column(db.Float, nullable=False)
     horizontall_coordinate = db.Column(db.Float,nullable=False)
-    area_name = db.Column(db.String(32),nullable=True,unique=True)
+    area_name = db.Column(db.String(4),nullable=True,unique=True)
     created_date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)   
 
     road_map = db.relationship("RoadMap",lazy=True)

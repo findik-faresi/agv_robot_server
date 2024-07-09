@@ -7,7 +7,9 @@ class RoadMap(BaseModel):
     
     robot_id = db.Column(db.Integer, db.ForeignKey("robot.id"), nullable=False)
     mission_id = db.Column(db.Integer, db.ForeignKey("mission.id"), nullable=False)
-    qr_code_id = db.Column(db.Integer, db.ForeignKey("qr_code.id"), nullable=False)
+
+    qr_code_id = db.Column(db.Integer, db.ForeignKey("qr_code.id"))
+
     index = db.Column(db.Integer, nullable=False)
     reached = db.Column(db.Boolean, nullable=False,default=False)
 

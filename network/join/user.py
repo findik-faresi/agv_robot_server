@@ -3,6 +3,7 @@ from models import Room,ConnectedUser,User
 from database.database import db
 from network import socketio
 from flask import request
+from termcolor import colored
 
 @socketio.on("_01")
 def _01(payload):
@@ -21,9 +22,10 @@ def _01(payload):
             return
 
         room = Room.query.filter_by(room_name=room_name).first()
+
         if not room:
-            emit("_s01", {"message":"Record not found","status":404})
-            return
+            room = Room(room_name=room_name)
+            db.session.add(room)
 
         connected_user = ConnectedUser.query.filter_by(user_id=user.id).first()
         if not connected_user: 
@@ -41,9 +43,10 @@ def _01(payload):
 
         db.session.commit()
         
-        join_room(room_name)
-        emit("_s01", {"message":{"id": user.id}, "status": 200}, room=room)
+        print(colored(f"[+] {user.username} connected to : {room_name}", "green"))
 
+        join_room(room_name)
+        emit("_s01", {"message":{"id": user.id}, "status": 200}, room=room_name)
     except Exception as e:
-        print(f"Error handling _01 event: {str(e)}")
+        print(colored(f"[-] Error handling join event: {str(e)}", "red"))
         emit("_s01", {"message": "An error occurred while processing your request", "status": 500})

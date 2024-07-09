@@ -4,6 +4,7 @@ from database.database import db
 from network import socketio
 from flask import request
 from werkzeug.security import check_password_hash
+from termcolor import colored
 
 @socketio.on("_11")
 def connect(payload):
