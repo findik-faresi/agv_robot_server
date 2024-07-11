@@ -10,25 +10,25 @@ def _10(payload):
         serial_number = payload.get("serial_number")
 
         if not (serial_number and secret_key):
-            emit("_s10", {"message":"Invalid data","status":400})
+            emit("_s10", {"message":"Invalid data","status":400}, room=serial_number)
             return
 
         robot = Robot.query.filter_by(serial_number=serial_number).first()
         if not robot:
-            emit("_s10", {"message":"Robot not found","status":404})
+            emit("_s10", {"message":"Robot not found","status":404}, room=serial_number)
             return
 
         connected_robot = ConnectedRobot.query.filter_by(robot_id=robot.id).first()
         if not connected_robot:
-            emit("_s10", {"message":"Record not found","status":404})
+            emit("_s10", {"message":"Record not found","status":404}, room=serial_number)
             return
         else:
             connected_robot.connected = False
             db.session.commit()
             leave_room(room)
 
-        emit("_s10", {"message":{"id":robot.id}, "status": 200}, room=room)
+        emit("_s10", {"message":{"id":robot.id}, "status": 200}, room=serial_number)
 
     except Exception as e:
-        print(f"Error handling _10 event: {str(e)}")
-        emit("_s10", {"message": "An error occurred while processing your request", "status": 500})
+        print(f"Error handling leave event: {str(e)}")
+        emit("_s10", {"message": "An error occurred while processing your request", "status": 500}, room=serial_number)

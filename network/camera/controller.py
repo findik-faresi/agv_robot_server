@@ -8,17 +8,17 @@ from database.database import db
 @socketio.on("_c6")
 def _c6(payload):
     try:
-        room = payload.get("room")
+        room_name = payload.get("room_name")
         data = payload.get("message")
 
-        if not (room and data):
-            emit("_sc6", {"message":"Invalid data","status":400})
+        if not (room_name and data):
+            emit("_sc6" ,{"message":"Invalid data","status":400} ,room=room_name)
             return
         
         print(f"[+] Camera data : {data}")
 
-        emit("_sc6", {"message": data,"status":200}, room=room)
+        emit("_sc6" ,{"message": data ,"status":200} ,room=room_name)
         
     except Exception as e:
         print(f"Error handling camera event: {str(e)}")
-        emit("_sc6", {"message": "An error occurred while processing your request", "status": 500})
+        emit("_sc6", {"message": "An error occurred while processing your request", "status": 500}, room=room_name)

@@ -5,7 +5,6 @@ from base.base import BaseModel
 class RoadMap(BaseModel):
     __tablename__ = "road_map"
     
-    robot_id = db.Column(db.Integer, db.ForeignKey("robot.id"), nullable=False)
     mission_id = db.Column(db.Integer, db.ForeignKey("mission.id"), nullable=False)
 
     qr_code_id = db.Column(db.Integer, db.ForeignKey("qr_code.id"))

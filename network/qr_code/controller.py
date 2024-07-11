@@ -5,22 +5,22 @@ from models import QRCode
 @socketio.on("_c2")
 def _c2(payload):
     try:
-        room = payload.get("room")
-        data = payload.get("data")
+        room_name = payload.get("room_name")
+        data = payload.get("message")
 
-        if not (room and data):
-            emit("_sc2", {"message":"Invalid data","status":400}) 
+        if not (data and room_name):
+            emit("_sc2", {"message":"Invalid data","status":400},room=room_name) 
             return
 
-        qr_code = QRCode.query.filter_by(vertical_coordinate=data.get("vertical_coordinate"),horizontall_coordinate=data.get("horizontall_coordinate")).first()
+        qr_code = QRCode.query.filter_by(area_name=data.get("area_name")).first()
 
         if not qr_code:
             qr_code = QRCode(data)
             db.session.add(qr_code)
             db.session.commit()
 
-        emit("_sc2", {"message": data,"status":200}, room=room)
+        emit("_sc2", {"message": data,"status":200}, room=room_name)
 
     except Exception as e:
         print(f"Error handling _c2 event: {str(e)}")
-        emit("_sc2", {"message": "An error occurred while processing your request", "status": 500})
+        emit("_sc2", {"message": "An error occurred while processing your request", "status": 500},room=room_name)

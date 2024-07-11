@@ -38,6 +38,6 @@ def robot_login():
     if not robot or not check_password_hash(robot.secret_key, secret_key):
         return jsonify({"message": "Invalid serial number or secret key"}), 401
 
-    print(colored(f"[+] {username} login :)", "green"))
+    print(colored(f"[+] {serial_number} login :)", "green"))
     access_token = create_access_token(identity=serial_number)
     return jsonify(access_token=access_token), 200

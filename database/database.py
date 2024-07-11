@@ -1,6 +1,6 @@
 from flask import Flask
 from . import db
-from init.init import _init
+from init.init import _init_admin, init_default_qr
 
 def init_db(app: Flask):
     app.config.from_object("config.Config")
@@ -8,4 +8,5 @@ def init_db(app: Flask):
 
     with app.app_context():
         db.create_all()
-        _init(db)
+        _init_admin(db)
+        init_default_qr(db)

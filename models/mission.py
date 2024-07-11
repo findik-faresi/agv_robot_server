@@ -11,6 +11,8 @@ class Mission(BaseModel):
 
     active = db.Column(db.Boolean, nullable=False, default=True)
 
+    is_completed = db.Column(db.Boolean, nullable=False, default=False)
+
     rank = db.Column(db.Integer, nullable=False ,default=0)
     _type = db.Column(db.String(1), nullable=False ,default="0")
     
