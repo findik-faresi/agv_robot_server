@@ -5,6 +5,7 @@ from flask_jwt_extended import jwt_required
 from models import ConnectedRobot, ConnectedUser, Robot
 from database.database import db
 from flask import request
+from termcolor import colored
 
 @socketio.on("disconnect")
 def handle_disconnect():
@@ -23,4 +24,4 @@ def handle_disconnect():
             db.session.commit()
     except Exception as e:
         # Log the error or handle it as needed
-        print(f"Error handling disconnect: {str(e)}")
+        print(colored(f"[-] Error handling disconnect event: {str(e)}.", "red", attrs=["bold"]))

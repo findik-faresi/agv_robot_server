@@ -13,13 +13,13 @@ def _01(payload):
         ip_address = request.remote_addr 
 
         if not (room_name and user_id and ip_address):
-            print(colored(f"[!] Invalid data: [R] : {room_name}, [U] : {user_id}, [IP] : {ip_address}", "yellow"))
+            print(colored(f"[!] Invalid data: [R] : {room_name}, [U] : {user_id}, [IP] : {ip_address}", "yellow",attrs=["bold"]))
             emit("_s01", {"message":"Invalid data","status":400}, room=room_name)
             return
 
         user = User.query.filter_by(id=user_id).first()
         if not user:
-            print(colored(f"[!] Record not found", "yellow"))
+            print(colored(f"[!] Record not found", "yellow", attrs=["bold"]))
             emit("_s01", {"message":"Record not found","status":404}, room=room_name)
             return
 
@@ -46,11 +46,11 @@ def _01(payload):
 
         db.session.commit()
         
-        print(colored(f"[+] {user.username} connected to : {room_name}", "green"))
+        print(colored(f"[+] {user.username} connected to : {room_name}", "green",attrs=["bold"]))
 
         join_room(room_name)
 
         emit("_s01", {"message":{"id": user.id}, "status": 200}, room=room_name)
     except Exception as e:
-        print(colored(f"[-] Error handling join event: {str(e)}", "red"))
+        print(colored(f"[-] Error handling join event: {str(e)}", "red", attrs=["bold"]))
         emit("_s01", {"message": "An error occurred while processing your request", "status": 500}, room=room_name)

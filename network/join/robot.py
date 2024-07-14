@@ -15,19 +15,19 @@ def connect(payload):
         ip_address = request.remote_addr 
 
         if not (serial_number and secret_key and ip_address):
-            print(colored(f"[!] - [S] : {serial_number}, [PWD] : {len(secret_key) * '*'}, [IP] : {ip_address} ", "yellow"))
+            print(colored(f"[!] - [S] : {serial_number}, [PWD] : {len(secret_key) * '*'}, [IP] : {ip_address} ", "yellow", attrs=["bold"]))
             emit("_s11", {"message":"Invalid data","status":400}, room=serial_number)
             return
 
         robot = Robot.query.filter_by(serial_number=serial_number).first()
 
         if not robot:
-            print(colored(f"[!] Record not found.", "yellow"))
+            print(colored(f"[!] Record not found.", "yellow", attrs=["bold"]))
             emit("_s11", {"message":"Record not found","status":415}, room=serial_number)
             return
 
         if check_password_hash(robot.secret_key,serial_number):
-            print(colored(f"[!] Unauthorized.", "yellow"))
+            print(colored(f"[!] Unauthorized.", "yellow", attrs=["bold"]))
             emit("_s11", {"message":" Unauthorized","status":401}, room=serial_number)
             return 
 
@@ -55,9 +55,9 @@ def connect(payload):
         
         join_room(serial_number)
 
-        print(colored(f"[+] Robot connected to server {serial_number}.", "green"))
+        print(colored(f"[+] Robot connected to server {serial_number}.", "green",attrs=["bold"]))
 
         emit("_s11", {"message":{"id": serial_number}, "status": 200}, room=serial_number)
     except Exception as e:
-        print(colored(f"[-] Error handling connection event: {str(e)}.", "red"))
+        print(colored(f"[-] Error handling connection event: {str(e)}.", "red", attrs=["bold"]))
         emit("_s11", {"message": "An error occurred while processing your request", "status": 500}, room=serial_number)

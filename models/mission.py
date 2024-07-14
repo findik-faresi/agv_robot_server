@@ -9,7 +9,7 @@ class Mission(BaseModel):
 
     mission_end_time = db.Column(db.DateTime, nullable=True)  
 
-    active = db.Column(db.Boolean, nullable=False, default=True)
+    active = db.Column(db.Boolean, nullable=False, default=False)
 
     is_completed = db.Column(db.Boolean, nullable=False, default=False)
 

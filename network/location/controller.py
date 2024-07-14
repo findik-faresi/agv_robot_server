@@ -2,6 +2,7 @@ from flask_socketio import emit
 from network import socketio
 from models import RobotLocation
 from database.database import db
+from termcolor import colored
 
 @socketio.on("_c0")
 def _c0(payload):
@@ -10,7 +11,7 @@ def _c0(payload):
         data = payload.get("message")
 
         if not (room and data):
-            emit("_sc0", {"message":"Invalid data","status":400}, room=room_name)
+            emit("_sc0", {"message":"Invalid data", "status":400}, room=room_name)
             return
 
         robot_location = RobotLocation.query.filter_by(mission_id=data.get("mission_id")).first()
@@ -27,5 +28,5 @@ def _c0(payload):
         emit("_sc0", {"message": data,"status":200}, room=room_name)
         
     except Exception as e:
-        print(f"Error handling location event: {str(e)}")
-        emit("_sc0", {"message": "An error occurred while processing your request", "status": 500},room=room_name)
+        print(colored(f"Error handling location event: {str(e)}", "red", attrs=["bold"]))
+        emit("_sc0", {"message": "An error occurred while processing your request", "status": 500}, room=room_name)
