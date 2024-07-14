@@ -1,14 +1,14 @@
 from flask_socketio import leave_room, emit
-from network import socketio
-from auth.jwt.jwt_auth import Auth
-from flask_jwt_extended import jwt_required
-from models import ConnectedRobot, ConnectedUser, Robot
-from database.database import db
 from flask import request
 from termcolor import colored
 
+from models import ConnectedRobot, ConnectedUser, Robot
+from database.database import db
+
+from . import socketio
+
 @socketio.on("disconnect")
-def handle_disconnect():
+def disconnect():
     try:
         ip_address = request.remote_addr
 

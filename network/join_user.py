@@ -1,12 +1,15 @@
 from flask_socketio import join_room, emit
-from models import Room,ConnectedUser,User
-from database.database import db
-from network import socketio
 from flask import request
+
 from termcolor import colored
 
-@socketio.on("_01")
-def _01(payload):
+from models import Room,ConnectedUser,User
+from database.database import db
+
+from . import socketio
+
+@socketio.on("join_user")
+def join_user(payload):
     try:
         room_name = payload.get("room_name")
         user_id = payload.get("user_id")
@@ -14,13 +17,13 @@ def _01(payload):
 
         if not (room_name and user_id and ip_address):
             print(colored(f"[!] Invalid data: [R] : {room_name}, [U] : {user_id}, [IP] : {ip_address}", "yellow",attrs=["bold"]))
-            emit("_s01", {"message":"Invalid data","status":400}, room=room_name)
+            emit("join_user", {"message":"Invalid data","status":400}, room=room_name)
             return
 
         user = User.query.filter_by(id=user_id).first()
         if not user:
             print(colored(f"[!] Record not found", "yellow", attrs=["bold"]))
-            emit("_s01", {"message":"Record not found","status":404}, room=room_name)
+            emit("join_user", {"message":"Record not found","status":404}, room=room_name)
             return
 
         room = Room.query.filter_by(room_name=room_name).first()
@@ -50,7 +53,7 @@ def _01(payload):
 
         join_room(room_name)
 
-        emit("_s01", {"message":{"id": user.id}, "status": 200}, room=room_name)
+        emit("join_user", {"message":{"id": user.id}, "status": 200}, room=room_name)
     except Exception as e:
         print(colored(f"[-] Error handling join event: {str(e)}", "red", attrs=["bold"]))
-        emit("_s01", {"message": "An error occurred while processing your request", "status": 500}, room=room_name)
+        emit("join_user", {"message": "An error occurred while processing your request", "status": 500}, room=room_name)

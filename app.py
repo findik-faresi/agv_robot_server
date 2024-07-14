@@ -1,31 +1,32 @@
 from flask import Flask
-from secrets import token_hex
 from database.database import init_db,db
 from flask_migrate import Migrate
 import secrets
 from flask_jwt_extended import JWTManager
+from datetime import timedelta
 
 from api import * 
 from auth.login import login_bp
 
 from network import socketio 
 
-from network.join import user,robot
-from network.leave import user,robot
+from network.join_robot import join_robot 
+from network.join_user import join_user 
 
-from network.disconnect.disconnect import handle_disconnect
+from network.leave_robot import leave_robot 
+from network.leave_user import leave_user 
 
-from network.location.controller import _c0
-from network.mission.controller import _c1 
-from network.qr_code.controller import _c2
-from network.status.controller import _c3
-from network.road_map.controller import _c5
-from network.camera.controller import _c6
+from network.disconnect import disconnect 
 
-from datetime import timedelta
+from network.camera import camera
+from network.location import location 
+from network.mission import mission 
+from network.qr_code import qr_code 
+from network.road_map import road_map 
+from network.status import status 
 
 app = Flask(__name__)
-app.config["SECRET_KEY"] = token_hex(16) 
+app.config["SECRET_KEY"] = secrets.token_hex(16) 
 secret_key = secrets.token_urlsafe(32)
 app.config["JWT_SECRET_KEY"] = secret_key
 app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(hours=4)
